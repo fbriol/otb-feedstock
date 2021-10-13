@@ -1,0 +1,31 @@
+{% set name = "openthreads" %}
+{% set version = "3.3.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://github.com/fbriol/OpenThreads.git
+    git_rev: {{ version }}
+
+
+build:
+  number: 0
+  skip: true  # [linux32 or win32]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/OpenThreads/Thread  # [unix]
+    - if not exist %PREFIX%\\include\\OpenThreads\\Thread exit 1  # [win]
+about:
+  home: http://www.openscenegraph.org
+  license: OpenSceneGraph Public License
+  license_file: LICENSE.txt
+  summary: A C++ open-source 3D graphics application programming interface

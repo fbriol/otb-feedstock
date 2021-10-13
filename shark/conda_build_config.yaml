@@ -1,0 +1,8 @@
+cxx_compiler_version:
+  - 9
+  
+boost_cpp:
+  - 1.74
+
+hdf5:
+  - 1.12.1

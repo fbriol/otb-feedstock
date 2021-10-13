@@ -1,0 +1,46 @@
+{% set name = "itk" %}
+{% set version = "4.13.3" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://github.com/InsightSoftwareConsortium/ITK.git
+    git_rev: v{{ version }}
+
+build:
+  number: 0
+  skip: true  # [linux32 or win32]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+  host:
+    - expat
+    - fftw
+    - hdf5
+    - icu
+    - jpeg                             # [not osx]
+    - libpng
+    - libtiff
+    - zlib
+  run:
+    - expat
+    - fftw
+    - libpng
+    - libtiff
+    - zlib
+
+test:
+  commands:
+    - test -d $PREFIX/include/ITK* # [not win]
+    - if not exist %LIBRARY_INC%\\ITK* exit 1 # [win]
+    - itkTestDriver -- echo "Runtime ITK OK"
+about:
+  home: http://www.itk.org
+  license: Apache 2.0
+  license_file: LICENSE
+  summary: Runtime libraries and header files for the Insight Toolkit for segmentation and registration.

@@ -1,0 +1,42 @@
+{% set name = "shark" %}
+{% set version = "4.0.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://github.com/Shark-ML/Shark.git
+    git_rev: v{{ version }}
+
+
+build:
+  number: 0
+  skip: true  # [linux32 or win32]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+
+  host:
+    - boost-cpp
+    - mkl
+    - mkl-devel
+    - hdf5
+
+  run:
+    - _openmp_mutex
+    - boost-cpp
+    - hdf5
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/shark/Core/Shark.h
+    - conda inspect linkages -p ${PREFIX} shark
+about:
+    home: http://www.shark-ml.org/
+    license: LGPL-3.0
+    license_file: COPYING
+    summary: A C++ machine learning library

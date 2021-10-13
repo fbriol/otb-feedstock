@@ -1,0 +1,49 @@
+{% set name = "ossim" %}
+{% set version = "2.12.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://github.com/ossimlabs/ossim.git
+    git_rev: {{ version }}
+
+
+build:
+  number: 0
+  skip: true  # [linux32 or win32]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+  host:
+    - freetype
+    - geos
+    - geotiff
+    - jsoncpp
+    - jpeg
+    - libtiff
+    - openthreads
+    - zlib
+  run:
+    - freetype
+    - geos
+    - geotiff
+    - jpeg
+    - libtiff
+    - openthreads
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/ossim/ossimVersion.h
+    - if not exist %PREFIX%\\include\ossim\ossimVersion.h exit 1  # [win]
+
+
+about:
+  home: https://trac.osgeo.org/ossim/
+  license: MIT
+  license_file: LICENSE.txt
+  summary: a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data.

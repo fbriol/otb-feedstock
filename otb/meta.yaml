@@ -1,0 +1,67 @@
+{% set name = "otb" %}
+{% set version = "7.4.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
+    git_rev: {{ version }}
+
+build:
+  number: 0
+  skip: true  # [linux32 or win32]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+    - git
+    - git-lfs
+  host:
+   - python {{ python }}
+   - gsl
+   - itk=4.13.3
+   - libgdal
+   - libkml
+   - libopencv
+   - libsvm
+   - muparser
+   - muparserx
+   - openthreads
+   - ossim
+   - shark
+   - swig
+   - tinyxml  
+  run:
+   - python {{ python }}
+   - gsl
+   - itk
+   - libgdal
+   - libkml
+   - libopencv
+   - libsvm
+   - muparser
+   - muparserx
+   - openthreads
+   - ossim
+   - shark
+   - tinyxml  
+
+test:
+  imports:
+    - otbApplication
+  files:
+    - test_data
+  commands:
+    - test -d $PREFIX/include/OTB*                        # [unix]
+    - if not exist %LIBRARY_INC%\\OTB* exit 1             # [win]
+    - otbcli_ReadImageInfo -in test_data/scene.png
+
+about:
+  home: https://www.orfeo-toolbox.org/
+  license: Apache 2.0
+  license_file: LICENSE
+  summary: Open Source processing of remote sensing images
